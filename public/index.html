@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 House Shorthand Online Institute | Deepak Koli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --ancient-bg: #fdf6e3; --paper: #f4ecd8; --premium-navy: #0a192f;
+            --gold-accent: #ffca28; --gold-border: #b8860b; --text-main: #3d2b1f;
+        }
+        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
+        body { font-family: 'Georgia', serif; background-color: var(--ancient-bg); color: var(--text-main); }
+        header { 
+            width: 100%; background: var(--premium-navy); color: var(--gold-accent); 
+            padding: 15px 5%; display: flex; flex-direction: row; align-items: center; 
+            justify-content: flex-start; gap: 20px; border-bottom: 4px solid var(--gold-border);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4); box-sizing: border-box; flex-shrink: 0; position: relative;
+        }
+        .header-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold-accent); object-fit: cover; }
+        .header-text h1 { margin: 0; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        #siteMotivation { color: #fff; font-style: italic; font-size: 0.9rem; opacity: 0.9; display: block; }
+
+        .container { flex: 1 0 auto; max-width: 1000px; margin: auto; padding: 30px 20px; width: 100%; box-sizing: border-box; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+        .card { 
+            background: var(--paper); padding: 25px 15px; border-radius: 12px; text-align: center; 
+            cursor: pointer; transition: 0.3s; border: 2px solid #dcd3b6; box-shadow: 5px 5px 0px #e0d7bc;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold-border); box-shadow: 8px 8px 0px var(--gold-border); }
+        .card i { font-size: 2.5rem; color: var(--premium-navy); margin-bottom: 10px; }
+        .card h3 { margin: 0; font-size: 1rem; color: var(--premium-navy); font-weight: bold; line-height: 1.2; }
+
+        .about-container { background: #fdf6e3; padding: 30px; border: 3px solid #b8860b; max-width: 900px; margin: 0 auto; color: #3d2b1f; line-height: 1.8; }
+
+        #pricingView, #listView, #practiceArea, #subMenu, #legalSubMenu, #aboutView { display: none; }
+        
+        /* TABS for About & Message */
+        .tab-nav { display: flex; max-width: 900px; margin: 0 auto 10px; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold-border); }
+        .tab-btn { flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: bold; background: #ddd; font-family: 'Georgia', serif; }
+        .active-tab { background: var(--gold-border); color: white; }
+
+        .item-row { background: #fdfbf5; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; border-left: 6px solid var(--premium-navy); font-weight: bold; }
+        textarea { width: 100%; height: 350px; padding: 15px; font-size: 1.2rem; border-radius: 10px; border: 2px solid var(--premium-navy); outline: none; background: #fff; }
+
+        footer { flex-shrink: 0; background: var(--premium-navy); color: #fff; padding: 30px 20px; text-align: center; border-top: 4px solid var(--gold-border); }
+        .gold-text { color: var(--gold-accent); font-weight: bold; }
+        #userStatus { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
+        .back-btn { margin-bottom:20px; padding: 10px 18px; cursor:pointer; background:var(--premium-navy); color:white; border-radius:5px; border:none; font-weight:bold; }
+        .mistake { color: red; text-decoration: line-through; }
+        .correct { color: green; font-weight: bold; }
+        #timer { font-size: 3.5rem; text-align: center; color: #e63946; font-family: monospace; font-weight: bold; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="https://i.postimg.cc/0jYfX0mY/vishnu.jpg" class="header-logo">
+    <div class="header-text">
+        <h1>7 House Shorthand Online Institute</h1>
+        <span id="siteMotivation">Succeed Confidently</span>
+    </div>
+    <div id="userStatus"></div>
+</header>
+
+<div class="container">
+    <div id="mainMenu">
+        <button onclick="showAbout()" class="back-btn" style="background:var(--gold-border); margin-bottom:30px;"><i class="fas fa-university"></i> ABOUT & MESSAGES</button>
+        <div class="grid">
+            <div class="card" onclick="loadCategory('7House-Mag')"><i class="fas fa-feather-alt"></i><h3>7 House Free<br>Dictations</h3></div>
+            <div class="card" onclick="loadCategory('KC-Free')"><i class="fas fa-scroll"></i><h3>KC Free<br>Dictations</h3></div>
+            <div class="card" onclick="showPaidSubMenu()" style="border-color: var(--gold-border);"><i class="fas fa-crown" style="color: var(--gold-border);"></i><h3 style="color: var(--gold-border);">Paid Content<br>Premium</h3></div>
+            <div class="card" onclick="loadCategory('Short-Outlines-Free')"><i class="fas fa-pen-nib"></i><h3>Advanced Outlines<br>(Free)</h3></div>
+            <div class="card" onclick="showLegalSubMenu()"><i class="fas fa-gavel"></i><h3>Legal Free<br>Dictations</h3></div>
+            <div class="card" onclick="loadCategory('Slow-Speed')"><i class="fas fa-hourglass-half"></i><h3>Slow Speed<br>Practice</h3></div>
+        </div>
+    </div>
+
+    <div id="subMenu" class="grid">
+        <div class="card" onclick="loadCategory('Daily-Test-80')"><h3>Daily Test 80 WPM</h3></div>
+        <div class="card" onclick="loadCategory('Short-Outlines')"><h3>Advanced Outlines (Premium)</h3></div>
+        <div class="card" onclick="loadCategory('Grammalogues-Premium')"><h3>Grammalogues & Contractions</h3></div>
+        <div class="card" onclick="loadCategory('Legal-Paid-100')"><h3>Legal 100 WPM</h3></div>
+        <div class="card" onclick="loadCategory('Legal-Paid-120')"><h3>Legal 120 WPM</h3></div>
+        <div class="card" onclick="loadCategory('KC-Paid-80')"><h3>KC 80 WPM</h3></div>
+        <div class="card" onclick="loadCategory('KC-Paid-100')"><h3>KC 100 WPM</h3></div>
+        <div class="card" onclick="loadCategory('KC-Paid-120')"><h3>KC 120 WPM</h3></div>
+        <div class="card" onclick="loadCategory('7House-80')"><h3>7 House 80 WPM</h3></div>
+        <button onclick="goBackMenu()" style="grid-column: 1/-1;" class="back-btn">BACK</button>
+    </div>
+
+    <div id="legalSubMenu" class="grid">
+        <div class="card" onclick="loadCategory('Legal-100')"><h3>Legal 100 WPM</h3></div>
+        <div class="card" onclick="loadCategory('Legal-120')"><h3>Legal 120 WPM</h3></div>
+        <button onclick="goBackMenu()" style="grid-column: 1/-1;" class="back-btn">BACK</button>
+    </div>
+
+    <div id="aboutView">
+        <button onclick="goBackMenu()" class="back-btn">BACK</button>
+        <div class="tab-nav">
+            <button onclick="switchTab('inst')" id="btnI" class="tab-btn active-tab">ABOUT INSTITUTE</button>
+            <button onclick="switchTab('msg')" id="btnM" class="tab-btn">MESSAGE FOR STUDENTS</button>
+        </div>
+        <div id="instBox" class="about-container">
+            <h2 style="text-align:center;">7 House Shorthand Online Institute</h2>
+            <p id="siteAboutText">Loading about information...</p>
+        </div>
+        <div id="msgBox" class="about-container" style="display:none; background:#fff3cd; border: 3px solid #856404;">
+            <h2 id="displayMsgTitle" style="text-align:center; color:#856404;">Important Message</h2>
+            <p id="displayMsgContent" style="white-space: pre-wrap; font-weight: bold; color:#856404;"></p>
+        </div>
+    </div>
+
+    <div id="listView">
+        <button onclick="goBackMenu()" class="back-btn">Back</button>
+        <div id="itemsContainer"></div>
+    </div>
+
+    <div id="practiceArea">
+        <h2 id="currentTitle" style="text-align:center; color: var(--premium-navy);"></h2>
+        <div id="timer">50:00</div>
+        <audio id="audioPlayer" controls style="width:100%; margin-bottom: 25px;"></audio>
+        <textarea id="userInput" placeholder="Start typing here to start timer..." oninput="triggerTimer()"></textarea>
+        <button onclick="checkResult()" style="margin-top:20px; width:100%; padding:15px; background:var(--premium-navy); color:var(--gold-accent); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">CHECK MISTAKES & RANK</button>
+        <div id="resultDisplay" style="margin-top:20px; padding:20px; background:#fdfbf5; border:1px solid #ddd; border-radius:10px; display:none;"></div>
+        <button onclick="closePractice()" style="margin-top:20px; width:100%; background:none; border:1px solid #ccc; cursor:pointer; padding:10px; border-radius:5px;">Close & Exit</button>
+    </div>
+
+    <div id="pricingView" style="text-align: center;">
+        <h2 style="color: var(--premium-navy);">Premium Access Required</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card"><h3>1 Month</h3><h2 style="color: #2a9d8f;">&#8377; 199</h2><p>Full Access</p><button class="back-btn">BUY NOW</button></div>
+            <div class="pricing-card featured"><h3>6 Months</h3><h2 style="color: #2a9d8f;">&#8377; 899</h2><p>Best Value</p><button class="back-btn">BUY NOW</button></div>
+            <div class="pricing-card"><h3>1 Year</h3><h2 style="color: #2a9d8f;">&#8377; 1500</h2><p>Complete Mastery</p><button class="back-btn">BUY NOW</button></div>
+        </div>
+        <button onclick="goBackMenu()" style="margin-top:20px; border:none; background:none; text-decoration:underline; cursor:pointer;">Maybe Later</button>
+    </div>
+</div>
+
+<footer>
+    <p class="gold-text">7 House Shorthand Online Institute</p>
+    <p>&copy; Since 2013 | Deepak Koli | Support: 9873594142</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    // Config Order Fixed
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBWbuh7eX-dbbJ0DyLoBRiwzAS2HbYi5QU", 
+        authDomain: "house-shorthand.firebaseapp.com", 
+        databaseURL: "https://house-shorthand-default-rtdb.firebaseio.com", 
+        projectId: "house-shorthand", 
+        storageBucket: "house-shorthand.firebasestorage.app", 
+        messagingSenderId: "1040239918670", 
+        appId: "1:1040239918670:web:26cf10bdae4d1670988d1f"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    let currentUser = null;
+    let masterText = "";
+    let currentDictId = "";
+    let timerInterval;
+    let seconds = 3000;
+    let timerStarted = false;
+
+    auth.onAuthStateChanged(user => {
+        currentUser = user;
+        if (user) {
+            document.getElementById('userStatus').innerHTML = `<span style="color:white; font-size:0.9rem;">${user.email.split('@')[0]}</span> <button onclick="auth.signOut()" style="background:#ff4444; border:none; color:white; padding:5px 10px; border-radius:5px; margin-left:10px; cursor:pointer; font-weight:bold;">LOGOUT</button>`;
+        } else {
+            document.getElementById('userStatus').innerHTML = `<button onclick="googleLogin()" style="background:var(--gold-accent); border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight:bold; color:var(--premium-navy);">LOGIN WITH GOOGLE</button>`;
+        }
+    });
+
+    function googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(err => alert(err.message));
+    }
+
+    // Site Data Loading
+    db.ref('siteConfig').on('value', snap => {
+        if(snap.exists()){
+            const d = snap.val();
+            document.getElementById('siteMotivation').innerText = d.motivation || "Succeed Confidently";
+            document.getElementById('siteAboutText').innerText = d.about || "Institute details...";
+            if(d.studentMessage) {
+                document.getElementById('displayMsgTitle').innerText = d.studentMessage.title || "Message";
+                document.getElementById('displayMsgContent').innerText = d.studentMessage.content || "";
+            }
+        }
+    });
+
+    function showAbout() { document.getElementById('mainMenu').style.display = 'none'; document.getElementById('aboutView').style.display = 'block'; }
+    function showPaidSubMenu() { document.getElementById('mainMenu').style.display = 'none'; document.getElementById('subMenu').style.display = 'grid'; }
+    function showLegalSubMenu() { document.getElementById('mainMenu').style.display = 'none'; document.getElementById('legalSubMenu').style.display = 'grid'; }
+    function goBackMenu() { location.reload(); }
+
+    function switchTab(t) {
+        document.getElementById('instBox').style.display = t==='inst'?'block':'none';
+        document.getElementById('msgBox').style.display = t==='msg'?'block':'none';
+        document.getElementById('btnI').className = t==='inst'?'tab-btn active-tab':'tab-btn';
+        document.getElementById('btnM').className = t==='msg'?'tab-btn active-tab':'tab-btn';
+    }
+
+    async function loadCategory(cat) {
+        // Plan check logic
+        let plan = 'free';
+        if(currentUser) {
+            const userSnap = await db.ref('users/'+currentUser.uid).once('value');
+            plan = userSnap.val()?.planType || 'free';
+        }
+
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('subMenu').style.display = 'none';
+        document.getElementById('legalSubMenu').style.display = 'none';
+        document.getElementById('listView').style.display = 'block';
+        
+        db.ref('dictations').orderByChild('category').equalTo(cat).on('value', snap => {
+            let h = "", i = 0;
+            snap.forEach(child => {
+                i++;
+                // Monthly Limit logic
+                if(plan==='monthly'){
+                    if(cat==='Daily-Test-80' && i>3) return;
+                    if(cat==='KC-Paid-80' && i>30) return;
+                }
+                if(plan==='6month'){
+                    if(cat==='Daily-Test-80' && i>30) return;
+                    if(cat==='KC-Paid-80' && i>300) return;
+                }
+
+                let d = child.val();
+                let isOutlines = cat.includes('Outlines') || cat.includes('Grammalogues');
+                h += `<div class="item-row">
+                    <span>${d.title}</span>
+                    <button onclick="handleAccess('${cat}', '${child.key}', '${d.pdf}', '${d.audio}', '${encodeURIComponent(d.content)}', '${d.title}')" style="background:var(--premium-navy); color:var(--gold-accent); border:none; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold;">${isOutlines ? 'VIEW PDF' : 'PRACTICE'}</button>
+                </div>`;
+            });
+            document.getElementById('itemsContainer').innerHTML = h || "<p style='text-align:center;'>Coming Soon!</p>";
+        });
+    }
+
+    function handleAccess(cat, id, pdf, audio, content, title) {
+        const isPaid = cat.includes('Paid') || cat === 'Daily-Test-80' || cat === 'Short-Outlines' || cat === 'Grammalogues-Premium' || cat === '7House-80';
+        currentDictId = id;
+        
+        if (isPaid) {
+            if (!currentUser) return alert("Please Login with Google First!");
+            db.ref('users/' + currentUser.uid).once('value', snap => {
+                const u = snap.val();
+                if (u && u.isPaid) {
+                    // Check speed restriction
+                    if(u.planType === 'monthly' && (cat.includes('100') || cat.includes('120') || cat.includes('Legal-Paid'))) return alert("Upgrade Plan for this speed!");
+                    if(u.planType === '6month' && (cat.includes('120'))) return alert("Yearly Plan Required for 120 WPM!");
+
+                    if (cat.includes('Outlines') || cat.includes('Grammalogues')) window.open(pdf, '_blank');
+                    else openPractice(title, audio, content);
+                } else {
+                    document.getElementById('listView').style.display = 'none';
+                    document.getElementById('pricingView').style.display = 'block';
+                }
+            });
+        } else {
+            if (cat.includes('Outlines') || cat.includes('Grammalogues')) window.open(pdf, '_blank');
+            else openPractice(title, audio, content);
+        }
+    }
+
+    function openPractice(title, audio, content) {
+        document.getElementById('listView').style.display = 'none';
+        document.getElementById('practiceArea').style.display = 'block';
+        document.getElementById('currentTitle').innerText = title;
+        document.getElementById('audioPlayer').src = audio;
+        masterText = decodeURIComponent(content);
+        document.getElementById('userInput').value = "";
+        document.getElementById('resultDisplay').style.display = 'none';
+        timerStarted = false; seconds = 3000;
+        document.getElementById('timer').innerText = "50:00";
+        if(timerInterval) clearInterval(timerInterval);
+    }
+
+    function triggerTimer() {
+        if(!timerStarted && document.getElementById('userInput').value.length > 0) {
+            timerStarted = true;
+            timerInterval = setInterval(() => {
+                seconds--;
+                let m = Math.floor(seconds/60), s = seconds%60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                if(seconds <= 0) { clearInterval(timerInterval); checkResult(); }
+            }, 1000);
+        }
+    }
+
+    function checkResult() {
+        clearInterval(timerInterval);
+        let uInput = document.getElementById('userInput').value.trim();
+        if(!uInput) return alert("Kuch type toh karo!");
+        
+        let u = uInput.split(/\s+/);
+        let m = masterText.trim().split(/\s+/);
+        let out = "", err = 0;
+
+        m.forEach((w, i) => {
+            if(u[i] === w) out += w + " ";
+            else { out += `<span class="mistake">${w}</span> <span class="correct">${u[i] || '___'}</span> `; err++; }
+        });
+
+        let acc = ((m.length - err) / m.length * 100).toFixed(2);
+        
+        if(currentUser && currentDictId) {
+            db.ref(`dict_ranks/${currentDictId}/${currentUser.uid}`).set({ email: currentUser.email, accuracy: parseFloat(acc) });
+            db.ref(`dict_ranks/${currentDictId}`).orderByChild('accuracy').once('value', snap => {
+                let scores = [];
+                snap.forEach(c => scores.push(c.val()));
+                scores.sort((a,b) => b.accuracy - a.accuracy);
+                let rank = scores.findIndex(x => x.email === currentUser.email) + 1;
+                
+                document.getElementById('resultDisplay').innerHTML = `
+                    <div style="background:var(--premium-navy); color:white; padding:20px; border-radius:10px; text-align:center; margin-bottom:15px;">
+                        <h2 style="margin:0;">Accuracy: ${acc}%</h2>
+                        <h3 style="color:var(--gold-accent); margin:10px 0 0 0;">RANK: #${rank}</h3>
+                    </div>
+                    <div style="max-height:300px; overflow-y:auto; padding:10px; border-top:1px solid #ccc; line-height:1.6;">${out}</div>`;
+                document.getElementById('resultDisplay').style.display = 'block';
+            });
+            // Record Daily limit
+            const today = new Date().toISOString().split('T')[0];
+            db.ref(`user_stats/${currentUser.uid}/${today}`).transaction(c => (c || 0) + 1);
+        }
+    }
+
+    function closePractice() { if(confirm("Exit Practice?")) location.reload(); }
+</script>
+</body>
+</html>

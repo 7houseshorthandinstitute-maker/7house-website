@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 House Admin Panel | Deepak Koli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #0a192f; --gold: #ffca28; --success: #2a9d8f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; margin: 0; }
+        #adminAuth { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 350px; }
+        .wrapper { max-width: 1000px; margin: 30px auto; display: none; } 
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; border-top: 5px solid var(--primary); }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        button { cursor: pointer; border-radius: 8px; border: none; font-weight: bold; background: var(--primary); color: var(--gold); padding: 15px; width: 100%; font-size: 1rem; transition: 0.3s; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; } 
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: var(--primary); }
+        .edit-btn { background: var(--success); color: white; padding: 6px 12px; border-radius: 4px; border:none; cursor: pointer;}
+        .delete-btn { background: #e63946; color: white; padding: 6px 12px; border-radius: 4px; border:none; cursor: pointer;}
+    </style>
+</head>
+<body>
+
+<div id="adminAuth">
+    <div class="login-card">
+        <img src="https://i.postimg.cc/0jYfX0mY/vishnu.jpg" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px; border:3px solid var(--gold);">
+        <h2>Deepak Koli Access</h2>
+        <input type="password" id="adminPass" placeholder="Enter Password">
+        <button onclick="checkAdmin()">UNLOCK SYSTEM</button>
+    </div>
+</div>
+
+<div class="wrapper" id="adminContent">
+    <div class="card">
+        <h3><i class="fas fa-edit"></i> Website Text & Student Message</h3>
+        <label>Deepak Koli's Motivation Line</label>
+        <input type="text" id="motivationText" placeholder="Succeed Confidently">
+        <label>About Institute Text</label>
+        <textarea id="aboutText" rows="4"></textarea>
+        
+        <div style="background:#fff3cd; padding:15px; border-radius:8px; margin-top:15px; border: 1px solid #ffeeba;">
+            <label><b>Student Message Folder Heading</b></label>
+            <input type="text" id="studentMsgTitle">
+            <label><b>Folder Content (Important Message)</b></label>
+            <textarea id="studentMsgContent" rows="4"></textarea>
+        </div>
+        <button onclick="updateWebText()" style="background: var(--success); color: white; margin-top:10px;">SAVE ALL CHANGES</button>
+    </div>
+
+    <div class="card">
+        <h2 id="formTitle"><i class="fas fa-cloud-upload-alt"></i> Upload Content</h2>
+        <input type="hidden" id="editKey">
+        <label>Title</label><input type="text" id="title">
+        <label>Category</label>
+        <select id="category">
+            <optgroup label="Free">
+                <option value="KC-Free">KC Free</option>
+                <option value="7House-Mag">7 House Mag</option>
+                <option value="Short-Outlines-Free">Outlines Free</option>
+                <option value="Legal-100">Legal 100 (Free)</option>
+            </optgroup>
+            <optgroup label="Paid">
+                <option value="Daily-Test-80">Daily Test 80 (Paid)</option>
+                <option value="KC-Paid-80">KC 80 (Paid)</option>
+                <option value="KC-Paid-100">KC 100 (Paid)</option>
+                <option value="KC-Paid-120">KC 120 (Paid)</option>
+                <option value="Legal-Paid-100">Legal 100 (Paid)</option>
+                <option value="Short-Outlines">Outlines (Paid)</option>
+            </optgroup>
+        </select>
+        <label>Audio URL</label><input type="text" id="audio">
+        <label>PDF URL</label><input type="text" id="pdf">
+        <label>Master Text</label><textarea id="content" rows="6"></textarea>
+        <button id="submitBtn" onclick="uploadData()">UPLOAD</button>
+    </div>
+
+    <div class="card"><h3>Students Management</h3><table id="studentList"></table></div>
+    <div class="card"><h3>Managed Files</h3><table id="fileList"></table></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBWbuh7eX-dbbJ0DyLoBRiwzAS2HbYi5QU", 
+        authDomain: "house-shorthand.firebaseapp.com",
+        databaseURL: "https://house-shorthand-default-rtdb.firebaseio.com",
+        projectId: "house-shorthand",
+        storageBucket: "house-shorthand.firebasestorage.app",
+        messagingSenderId: "1040239918670",
+        appId: "1:1040239918670:web:26cf10bdae4d1670988d1f"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function checkAdmin() { 
+        if(document.getElementById('adminPass').value === "DEEPAK7HOUSE") { 
+            document.getElementById('adminAuth').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block'; 
+            loadData(); 
+        } else { alert("Galat Password!"); } 
+    }
+
+    function updateWebText() {
+        const motivation = document.getElementById('motivationText').value;
+        const about = document.getElementById('aboutText').value;
+        const msgTitle = document.getElementById('studentMsgTitle').value;
+        const msgContent = document.getElementById('studentMsgContent').value;
+        db.ref('siteConfig').update({ 
+            motivation, about, 
+            studentMessage: { title: msgTitle, content: msgContent } 
+        }).then(() => alert("All updated!"));
+    }
+
+    function loadData() {
+        db.ref('siteConfig').on('value', snap => {
+            const d = snap.val();
+            if(d) {
+                document.getElementById('motivationText').value = d.motivation || "";
+                document.getElementById('aboutText').value = d.about || "";
+                if(d.studentMessage) {
+                    document.getElementById('studentMsgTitle').value = d.studentMessage.title || "";
+                    document.getElementById('studentMsgContent').value = d.studentMessage.content || "";
+                }
+            }
+        });
+        db.ref('users').on('value', snap => {
+            let h = "<tr><th>Email</th><th>Plan</th><th>Action</th></tr>";
+            snap.forEach(c => {
+                let u = c.val();
+                h += `<tr><td>${u.email}</td><td>${u.planType || 'Free'}</td><td>
+                <select id="days_${c.key}"><option value="30">1 Month</option><option value="180">6 Month</option><option value="365">1 Year</option><option value="0">Revoke</option></select>
+                <button onclick="updateAccess('${c.key}')" style="width:auto; padding:5px;">Set</button></td></tr>`;
+            });
+            document.getElementById('studentList').innerHTML = h;
+        });
+        db.ref('dictations').on('value', snap => {
+            let h = "<tr><th>Title</th><th>Category</th><th>Actions</th></tr>";
+            snap.forEach(c => {
+                let d = c.val();
+                h += `<tr><td>${d.title}</td><td>${d.category}</td><td><button class="edit-btn" onclick="editFile('${c.key}')">Edit</button></td></tr>`;
+            });
+            document.getElementById('fileList').innerHTML = h;
+        });
+    }
+
+    function updateAccess(uid) {
+        let days = parseInt(document.getElementById('days_' + uid).value);
+        let expiry = new Date(); expiry.setDate(expiry.getDate() + days);
+        let pType = days === 180 ? '6month' : (days === 365 ? 'yearly' : 'monthly');
+        if(days === 0) db.ref('users/'+uid).update({isPaid:false, planType:'none'});
+        else db.ref('users/'+uid).update({isPaid:true, planType:pType, planExpiry:expiry.toISOString()});
+        alert("Plan updated!");
+    }
+
+    function uploadData() {
+        const title = document.getElementById('title').value, category = document.getElementById('category').value, pdf = document.getElementById('pdf').value;
+        const audio = document.getElementById('audio').value || "none", content = document.getElementById('content').value || "none", key = document.getElementById('editKey').value;
+        const data = { title, category, audio, pdf, content };
+        if(key) db.ref('dictations/'+key).update(data).then(()=>location.reload());
+        else db.ref('dictations').push(data).then(()=>location.reload());
+    }
+
+    function editFile(key) {
+        db.ref('dictations/'+key).once('value', snap => {
+            const d = snap.val();
+            document.getElementById('editKey').value = key;
+            document.getElementById('title').value = d.title;
+            document.getElementById('category').value = d.category;
+            document.getElementById('audio').value = d.audio;
+            document.getElementById('pdf').value = d.pdf;
+            document.getElementById('content').value = d.content;
+            document.getElementById('submitBtn').innerText = "UPDATE NOW";
+            window.scrollTo(0,0);
+        });
+    }
+</script>
+</body>
+</html>
